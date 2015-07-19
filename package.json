@@ -16,5 +16,11 @@
     "url": "https://github.com/mingezhao/MyTechnologies/issues"
   },
   "homepage": "https://github.com/mingezhao/MyTechnologies#readme",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-uglify": "^0.9.1"
+  }
 }
