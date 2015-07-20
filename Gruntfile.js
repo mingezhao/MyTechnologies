@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         "bower": {
             "dev-install": {
                 "options": {
-                    "targetDir": "./src/js/lib",
+                    "targetDir": "./src/lib",
                     "layout": "byComponent",
                     "install": true,
                     "verbose": false,
@@ -18,5 +18,5 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-bower-task');
 
-    grunt.registerTask('dev-build', ['bower:dev-install']);;
+    grunt.registerTask('dev-build', ['bower:dev-install']);
 };
