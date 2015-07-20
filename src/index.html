@@ -15,7 +15,24 @@
         <header-menus></header-menus>
     </header-body>
 
-
+    <div class="container" ng-controller="HomeCtrl">
+        <section>
+            <h1 class="page-header">Modules</h1>
+            <p class="text-muted">
+                <input class="form-control" autofocus="autofocus" style="max-width: 15em; display: inline-block;" ng-model="searchText" placeholder="search...">
+                {{(modules| filter:searchText).length}} modules found
+            </p>
+            <div class="list-group">
+                <div ng-repeat="module in modules| filter:searchText | orderBy: 'order'" class="list-group-item">
+                    <p class="pull-right">
+                        <a href="{{module.src}}" title="Home / Demo page"><i class="fa fa-3x fa-home"></i></a>
+                    </p>
+                    <h4 class="list-group-item-heading">{{module.name}}</h4>
+                    <p class="list-group-item-text text-muted">{{module.desc}}</p>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <footer-body></footer-body>
 

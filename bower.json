@@ -20,7 +20,7 @@
   },
   "exportsOverride": {
     "bootstrap": {
-      "css": "dist/css/*.css",
+      "css": "dist/css/*.*",
       "fonts": "dist/fonts/*.*"
     }
   }
