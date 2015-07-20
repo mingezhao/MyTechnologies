@@ -1,4 +1,4 @@
-(function (window, angular) {
+(function (window, document, angular) {
     'use strict';
 
     /**
@@ -172,4 +172,6 @@
      */
     window.app = angular.module('app', ['ui.bootstrap', 'app.config', 'app.directives']);
 
-})(window, angular)
+    angular.bootstrap(document, ['app']);
+
+})(window, document, angular)

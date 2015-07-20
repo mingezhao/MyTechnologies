@@ -17,5 +17,11 @@
     "font-awesome": "~4.3.0",
     "requirejs": "~2.1.19",
     "jquery-file-upload": "~9.10.4"
+  },
+  "exportsOverride": {
+    "bootstrap": {
+      "css": "dist/css/*.css",
+      "fonts": "dist/fonts/*.*"
+    }
   }
 }
