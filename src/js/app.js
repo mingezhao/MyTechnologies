@@ -11,8 +11,8 @@
             modules: [
                 {
                     order: 1,
-                    key: 'jQuery',
-                    name: 'jQuery',
+                    key: 'nodejs',
+                    name: 'Node.Js',
                     src: '/jquery/index',
                     desc: ''
                 },
@@ -23,7 +23,6 @@
                     src: '/icons/index.html',
                     desc: 'Glyphicons & Font Awesome',
                 },
-
             ]
         });
 
@@ -172,6 +171,10 @@
      */
     window.app = angular.module('app', ['ui.bootstrap', 'app.config', 'app.directives']);
 
-    angular.bootstrap(document, ['app']);
-
+    /**
+     * Start angular after document ready
+     * */
+    angular.element(document).ready(function() {
+        angular.bootstrap(document, ['app']);
+    });
 })(window, document, angular)
