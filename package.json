@@ -16,7 +16,6 @@
     "url": "https://github.com/mingezhao/MyTechnologies/issues"
   },
   "homepage": "https://github.com/mingezhao/MyTechnologies#readme",
-  "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-bower-task": "^0.4.0",

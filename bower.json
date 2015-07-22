@@ -9,19 +9,20 @@
     "test",
     "tests"
   ],
-  "dependencies": {
+  "exportsOverride": {
+    "bootstrap": {
+      "css": "dist/css/*.*",
+      "fonts": "dist/fonts/*.*"
+    }
+  },
+  "devDependencies": {
     "jquery": "~2.1.4",
     "angular": "~1.4.3",
     "angular-bootstrap": "~0.13.0",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.3.0",
     "requirejs": "~2.1.19",
-    "jquery-file-upload": "~9.10.4"
-  },
-  "exportsOverride": {
-    "bootstrap": {
-      "css": "dist/css/*.*",
-      "fonts": "dist/fonts/*.*"
-    }
+    "jquery-file-upload": "~9.10.4",
+    "google-code-prettify": "~1.0.4"
   }
 }
