@@ -6,15 +6,15 @@
      */
     angular.module('app.config', []).
         constant('config', {
-            siteTitle: 'Technologies',
-            siteRootUri: '/index.html',
+            siteTitle: 'My Technologies',
+            siteRootUri: '../home/index.html',
             modules: [
                 {
                     order: 1,
-                    key: 'nodejs',
-                    name: 'Node.Js',
-                    src: '/jquery/index',
-                    desc: ''
+                    key: 'angular',
+                    name: 'AngularJS',
+                    src: '../angular/index.html',
+                    //desc: 'AngularJS是一款优秀的前端JS框架，它有很多优秀的特性如：MVVM、模块化、自动双向数据绑定、语义化标签、依赖注入等等'
                 },
                 {
                     order: 2,
@@ -62,7 +62,7 @@
                 controller: 'HeaderCtrl',
                 link: function (scope, element, attrs, headerCtrl) {
                     if (angular.isUndefined(scope.moduleKey)) {
-                        scope.title = 'Technologies';
+                        scope.title = headerCtrl.getConfig().siteTitle;;
                     }
                     else {
                         var module = headerCtrl.getModule(scope.moduleKey);
@@ -98,7 +98,7 @@
                     });
 
                     menusHtml +=
-                        '       <li><a href="https://github.com/mingezhao/Technologies"><i class="fa fa-github"></i>&nbsp;Git Hub</a></li>\n' +
+                        '       <li><a href="https://github.com/mingezhao/MyTechnologies" target="_blank"><i class="fa fa-github"></i>&nbsp;Git Hub</a></li>\n' +
                         '   </ul>\n' +
                         '</nav>\n';
 
@@ -118,22 +118,6 @@
                 '   <header class="navbar navbar-default navbar-fixed-top">\n' +
                 '       <div class="navbar-inner">\n' +
                 '           <div class="container" ng-transclude>\n' +
-                '               <nav>\n' +
-                '                   <a class="navbar-brand" href=""></a>\n' +
-                '                   <ul class="nav navbar-nav">\n' +
-                '                       <li class="dropdown" dropdown>\n' +
-                '                           <span role="button" class="dropdown-toggle" dropdown-toggle>\n' +
-                '                               Directives <b class="caret"></b>\n' +
-                '                           </span>\n' +
-                '                           <ul class="dropdown-menu">\n' +
-                '                               <li ng-repeat="module in modules">\n' +
-                '                                   <a ng-href="{{module.src}}">{{module.name}}</a>\n' +
-                '                               </li>\n' +
-                '                           </ul>\n' +
-                '                       </li>\n' +
-                '                       <li><a href="https://github.com/mingezhao/Technologies"><i class="fa fa-github"></i>&nbsp;Git Hub</a></li>\n' +
-                '                   </ul>\n' +
-                '               </nav>\n' +
                 '           </div>\n' +
                 '       </div>\n' +
                 '   </header>\n' +
@@ -160,6 +144,25 @@
         }).
         run(function ($templateCache) {
             $templateCache.put('template/footer-body.html',
+                '<footer class="footer">\n' +
+                '   <div class="container">\n' +
+                '   </div>\n' +
+                '</footer>');
+        });
+
+    /**
+     * Side Menu Directive
+     */
+    angular.module('app.directives.sideMenu', []).
+        directive('sideMenu', function () {
+            return {
+                restrict: 'E',
+                replace: true,
+                templateUrl: 'template/footer-body.html'
+            };
+        }).
+        run(function ($templateCache) {
+            $templateCache.put('template/side-menu.html',
                 '<footer class="footer">\n' +
                 '   <div class="container">\n' +
                 '   </div>\n' +
