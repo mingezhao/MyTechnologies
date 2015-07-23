@@ -29,7 +29,7 @@
     /**
      * Directives Module
      */
-    angular.module('app.directives', ['app.config', 'app.directives.header', 'app.directives.footer']);
+    angular.module('app.directives', ['app.config', 'app.directives.header', 'app.directives.footer', 'app.directives.sideMenu']);
 
     /**
      * Header Directive
@@ -62,7 +62,8 @@
                 controller: 'HeaderCtrl',
                 link: function (scope, element, attrs, headerCtrl) {
                     if (angular.isUndefined(scope.moduleKey)) {
-                        scope.title = headerCtrl.getConfig().siteTitle;;
+                        scope.title = headerCtrl.getConfig().siteTitle;
+                        ;
                     }
                     else {
                         var module = headerCtrl.getModule(scope.moduleKey);
@@ -154,11 +155,71 @@
      * Side Menu Directive
      */
     angular.module('app.directives.sideMenu', []).
-        directive('sideMenu', function () {
+        service('sideMenuService', function () {
+            var menuRoot = {
+                id: null,
+                items: []
+            };
+
+            var getTarget = function (parentId, menuItem) {
+                if (parentId == menuItem.id) {
+                    return menuItem;
+                }
+                else {
+                    for (var i = 0; i < menuItem.items.length; i++) {
+                        return getTarget(menuItem.items[i]);
+                    }
+                }
+            };
+
+            this.addTarget = function (name, parentId) {
+                var menuItem = getTarget(parentId, menuRoot);
+
+                var id =  menuItem.items.length;
+                menuItem.items.push({
+                    id: id,
+                    name: name,
+                    items: []
+                });
+
+                return id;
+            };
+
+            this.getMenus = function () {
+                return menuItems;
+            };
+        }).
+        controller('sideMenuController', function (sideMenuService) {
+            this.getService = function () {
+                return sideMenuService;
+            };
+        }).
+        //directive('sideMenu', function () {
+        //    return {
+        //        restrict: 'E',
+        //        replace: true,
+        //        templateUrl: 'template/footer-body.html'
+        //    };
+        //}).
+        directive('sideMenuTarget', function () {
             return {
-                restrict: 'E',
-                replace: true,
-                templateUrl: 'template/footer-body.html'
+                restrict: 'A',
+                replace: false,
+                scope: {
+                    'sideMenuTarget': '@',
+                },
+                controller: 'sideMenuController',
+                link: function (scope, element, attrs, sideMenuController) {
+                    var
+                        service = sideMenuController.getService(),
+                        parentMenuTarget = element.parent('[sideMenuTarget]:first'),
+                        parentId = parentMenuTarget.length == 0 ? null : parentMenuTarget.data('sidemenutarget-id'),
+                        id = service.addTarget(scope.sideMenuTarget, parentId);
+
+                    element.html(scope.sideMenuTarget);
+                    element.attr('id', 'sidemenu-' + id);
+                    element.data('sidemenutarget-id', id);
+                }
             };
         }).
         run(function ($templateCache) {
@@ -177,7 +238,7 @@
     /**
      * Start angular after document ready
      * */
-    angular.element(document).ready(function() {
+    angular.element(document).ready(function () {
         angular.bootstrap(document, ['app']);
     });
 })(window, document, angular)
