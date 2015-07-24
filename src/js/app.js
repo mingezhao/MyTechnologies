@@ -13,7 +13,7 @@
                     order: 1,
                     key: 'angular',
                     name: 'AngularJS',
-                    src: '../angular/index.html',
+                    src: '../angular/index.html'
                     //desc: 'AngularJS是一款优秀的前端JS框架，它有很多优秀的特性如：MVVM、模块化、自动双向数据绑定、语义化标签、依赖注入等等'
                 },
                 {
@@ -21,8 +21,8 @@
                     key: 'Icons',
                     name: 'Icons',
                     src: '/icons/index.html',
-                    desc: 'Glyphicons & Font Awesome',
-                },
+                    desc: 'Glyphicons & Font Awesome'
+                }
             ]
         });
 
@@ -57,13 +57,13 @@
                 transclude: true,
                 templateUrl: 'template/header-body.html',
                 scope: {
-                    moduleKey: '@'
+                    moduleKey: '@',
+                    fixed: '@'
                 },
                 controller: 'HeaderCtrl',
                 link: function (scope, element, attrs, headerCtrl) {
                     if (angular.isUndefined(scope.moduleKey)) {
                         scope.title = headerCtrl.getConfig().siteTitle;
-                        ;
                     }
                     else {
                         var module = headerCtrl.getModule(scope.moduleKey);
@@ -78,10 +78,10 @@
                 restrict: 'AE',
                 replace: true,
                 require: '^headerBody',
-                template: function (element, attrs) {
+                template: function (element) {
                     var menusHtml =
                         '<nav>\n' +
-                        '   <a class="navbar-brand" href="{{siteRootUri}}">{{siteTitle}}</a>\n' +
+                        '   <a class="navbar-brand" ng-href="{{siteRootUri}}">{{siteTitle}}</a>\n' +
                         '   <ul class="nav navbar-nav">\n' +
                         '       <li class="dropdown" dropdown>\n' +
                         '           <span role="button" class="dropdown-toggle" dropdown-toggle>\n' +
@@ -92,9 +92,9 @@
                         '                   <a ng-href="{{module.src}}">{{module.name}}</a>\n' +
                         '               </li>\n' +
                         '           </ul>\n' +
-                        '       </li>\n'
+                        '       </li>\n';
 
-                    angular.forEach(element.children(), function (item, index) {
+                    angular.forEach(element.children(), function (item) {
                         menusHtml += item.outerHTML;
                     });
 
@@ -116,13 +116,13 @@
         run(function ($templateCache) {
             $templateCache.put('template/header-body.html',
                 '<div role="header">\n' +
-                '   <header class="navbar navbar-default navbar-fixed-top">\n' +
+                '   <header class="navbar navbar-default" ng-class="{\'navbar-fixed-top\':fixed, \'bs-header-no-margin-bottom\':!fixed}">\n' +
                 '       <div class="navbar-inner">\n' +
                 '           <div class="container" ng-transclude>\n' +
                 '           </div>\n' +
                 '       </div>\n' +
-                '   </header>\n' +
-                '   <header class="bs-header text-center">\n' +
+                '   </header>' +
+                '   <header class="bs-header text-center" ng-class="{\'bs-header-margin-top\':fixed}">\n' +
                 '       <div class="container">\n' +
                 '           <h1>{{title}}</h1>\n' +
                 '           <p>{{desc}}</p>\n' +
@@ -157,10 +157,12 @@
     angular.module('app.directives.sideMenu', []).
         service('sideMenuService', function () {
             var menuRoot = {
-                id: null,
+                id: 'sidemenu-0',
+                level: 0,
+                parent: null,
                 items: []
             };
-
+            var currentMenu = menuRoot;
             var getTarget = function (parentId, menuItem) {
                 if (parentId == menuItem.id) {
                     return menuItem;
@@ -171,69 +173,98 @@
                     }
                 }
             };
+            this.addTarget = function (name, level) {
+                if (currentMenu.level != level - 1) {
+                    currentMenu = currentMenu.parent;
+                }
 
-            this.addTarget = function (name, parentId) {
-                var menuItem = getTarget(parentId, menuRoot);
-
-                var id =  menuItem.items.length;
-                menuItem.items.push({
-                    id: id,
+                var newMenu = {
+                    id: currentMenu.id + "-" + currentMenu.items.length,
                     name: name,
+                    level: level,
+                    parent: currentMenu,
                     items: []
-                });
+                };
+                currentMenu.items.push(newMenu);
+                currentMenu = newMenu;
 
-                return id;
+                return newMenu;
+            };
+            this.getMenuRoot = function () {
+                return menuRoot;
             };
 
-            this.getMenus = function () {
-                return menuItems;
+            var currentActiveMenuEls = [];
+            this.getActiveMenuEls = function () {
+                return currentActiveMenuEls;
             };
         }).
-        controller('sideMenuController', function (sideMenuService) {
-            this.getService = function () {
-                return sideMenuService;
+        directive('sideMenu', function (sideMenuService) {
+            return {
+                restrict: 'EA',
+                replace: true,
+                templateUrl: 'template/side-menu.html',
+                scope: {},
+                controller: function ($scope) {
+                    $scope.menuRoot = sideMenuService.getMenuRoot();
+
+                    $scope.active = function (event, menu) {
+                        var
+                            el = angular.element(event.target),
+                            activeEls = sideMenuService.getActiveMenuEls();
+
+                        for(var i=0;i<activeEls.length;i++){
+                            var item  = activeEls[i];
+                            if (item.level >= menu.level) {
+                                item.el.removeClass('active');
+                                activeEls.splice(i, 1);
+                                i--;
+                            }
+                        }
+
+                        el.parent().addClass('active');
+                        activeEls.push({
+                            level: menu.level,
+                            el: el.parent()
+                        });
+                    }
+                }
             };
         }).
-        //directive('sideMenu', function () {
-        //    return {
-        //        restrict: 'E',
-        //        replace: true,
-        //        templateUrl: 'template/footer-body.html'
-        //    };
-        //}).
-        directive('sideMenuTarget', function () {
+        directive('sideMenuLevel', function (sideMenuService) {
             return {
                 restrict: 'A',
                 replace: false,
                 scope: {
-                    'sideMenuTarget': '@',
+                    sideMenuLevel: '@'
                 },
-                controller: 'sideMenuController',
-                link: function (scope, element, attrs, sideMenuController) {
-                    var
-                        service = sideMenuController.getService(),
-                        parentMenuTarget = element.parent('[sideMenuTarget]:first'),
-                        parentId = parentMenuTarget.length == 0 ? null : parentMenuTarget.data('sidemenutarget-id'),
-                        id = service.addTarget(scope.sideMenuTarget, parentId);
-
-                    element.html(scope.sideMenuTarget);
-                    element.attr('id', 'sidemenu-' + id);
-                    element.data('sidemenutarget-id', id);
+                link: function (scope, element) {
+                    var newMenu = sideMenuService.addTarget(element.html(), scope.sideMenuLevel);
+                    element.attr('id', newMenu.id);
                 }
             };
         }).
         run(function ($templateCache) {
             $templateCache.put('template/side-menu.html',
-                '<footer class="footer">\n' +
-                '   <div class="container">\n' +
-                '   </div>\n' +
-                '</footer>');
+                '<nav class="bs-docs-sidebar" bs-affix>\n' +
+                '   <ul class="nav bs-docs-sidenav">\n' +
+                '       <li ng-repeat="menu in menuRoot.items">\n' +
+                '           <a ng-href="#{{menu.id}}" ng-click="active($event, menu)">{{menu.name}}</a>\n' +
+                '           <ul class="nav" ng-if="menu.items.length > 0">' +
+                '               <li ng-repeat="childMenu in menu.items">' +
+                '                   <a ng-href="#{{childMenu.id}}" ng-click="active($event, childMenu)">{{childMenu.name}}</a>' +
+                '               </li>' +
+                '           </ul>\n' +
+                '       </li>\n' +
+                '   </ul>\n' +
+                '</nav>'
+            );
         });
 
     /**
      * Init app for each page
      */
-    window.app = angular.module('app', ['ui.bootstrap', 'app.config', 'app.directives']);
+    window.app = angular.module('app', ['ui.bootstrap', 'hljs', 'mgcrea.bootstrap.affix', 'app.config', 'app.directives']);
 
     /**
      * Start angular after document ready
@@ -241,4 +272,4 @@
     angular.element(document).ready(function () {
         angular.bootstrap(document, ['app']);
     });
-})(window, document, angular)
+})(window, document, angular);

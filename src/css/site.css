@@ -23,6 +23,13 @@
     color: #cdbfe3;
     background-color: #563d7c;
     background-image: url(../img/header.png);
+}
+
+.bs-header-no-margin-bottom{
+    margin-bottom: 0 !important;
+}
+
+.bs-header-margin-top{
     margin-top: 50px;
 }
 

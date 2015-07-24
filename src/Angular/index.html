@@ -6,10 +6,12 @@
 
     <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="../lib/font-awesome/font-awesome.css"/>
+    <link rel="stylesheet" href="../lib/google-code-prettify/prettify.min.css"/>
+    <link rel="stylesheet" href="../lib/highlightjs/default.css"/>
     <link rel="stylesheet" href="../css/site.css"/>
     <link rel="stylesheet" href="../css/skin-1.css"/>
 </head>
-<body class="skin-1">
+<body class="skin-1" onload="prettyPrint()">
 <header-body module-key="angular">
     <header-menus></header-menus>
 </header-body>
@@ -18,55 +20,35 @@
     <div class="row">
         <div class="col-md-9">
             <div class="bs-docs-section">
-                <h1 class="page-header" side-menu-target="安装"></h1>
+                <h1 class="page-header" side-menu-level="1">安装</h1>
 
             </div>
             <div class="bs-docs-section">
-                <h1 class="page-header" side-menu-target="启动引导"></h1>
+                <h1 class="page-header" side-menu-level="1">启动引导</h1>
 
                 <p class="lead">AnuglarJS有两种引导方式：自动引导和手动引导。</p>
 
-                <h2 side-menu-target="自动引导"></h2>
+                <h2 side-menu-level="2">自动引导</h2>
 
                 <p>如果HTML模板中有某个标签有<code>ng-app</code>属性，那么当DOM树建立成功后， AngularJS就会自动进入引导过程，启动整个框架。</p>
 
-                <h2 side-menu-target="手动引导"></h2>
+                <h2 side-menu-level="2">手动引导</h2>
 
-                <p>在大多数情况下，我们都使用<code>ng-app</code>指令来进行自动引导启动，另外我们也可以使用<code>angular.bootstrap()</code>方法进行手动引导。</p>
+                <p>在大多数情况下，我们都使用<code>ng-app</code>指令来进行自动引导启动，另外也可以使用<code>angular.bootstrap()</code>方法进行手动引导。</p>
 
                 <div class="highlight">
                 </div>
-                <h2 side-menu-target="自动引导：运用场景"></h2>
+                <h2 side-menu-level="2">手动引导：运用场景</h2>
 
                 <p>如果一个HTML文件中有多个<code>ng-app</code>，AngularJS只会自动引导启动它找到的第一个<code>ng-app</code>应用，这时需要手动引导。</p>
 
-                <div class="highlight">
-
-
+                <div class="highlight" hljs source="'<html><head><body></body></head></html>'">
 
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <nav class="bs-docs-sidebar affix-top">
-                <ul class="nav bs-docs-sidenav">
-                    <li>
-                        <a href="#">安装</a>
-                    </li>
-                    <li>
-                        <a href="#">安装</a>
-                    </li>
-                    <li>
-                        <a href="#">安装</a>
-                    </li>
-                    <li>
-                        <a href="#">安装</a>
-                    </li>
-                    <li>
-                        <a href="#">安装</a>
-                    </li>
-                </ul>
-            </nav>
+            <side-menu></side-menu>
         </div>
     </div>
 </div>
@@ -75,6 +57,11 @@
 
 <script src="../lib/angular/angular.js"></script>
 <script src="../lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="../lib/angular-jquery/angular-jquery.js"></script>
+<script src="../lib/angular-bootstrap-affix/angular-bootstrap-affix.js"></script>
+<script src="../lib/google-code-prettify/prettify.min.js"></script>
+<script src="../lib/highlightjs/highlight.pack.js"></script>
+<script src="../lib/angular-highlightjs/angular-highlightjs.js"></script>
 <script src="../js/app.js"></script>
 </body>
 </html>
